@@ -3,6 +3,8 @@ require 'securerandom'
 require 'json'
 
 class OxfordSpeechApi
+  class ConnectionError < StandardError; end;
+
   def initialize(client, secret)
     @client = client
     @secret = secret
@@ -27,12 +29,12 @@ class OxfordSpeechApi
     }
     retried = false
     begin
-        response = RestClient.post 'https://speech.platform.bing.com/recognize/query?' + URI.encode_www_form(params), data, headers
-        JSON.parse(response)
-    rescue Errno::ECONNRESET
-        return nil if retried
-        retried = true
-        retry
+      response = RestClient.post 'https://speech.platform.bing.com/recognize/query?' + URI.encode_www_form(params), data, headers
+      JSON.parse(response)
+    rescue Errno::ECONNRESET => error
+      raise ConnectionError.new("An error in connection occured. #{error.class}: #{error.message}") if retried
+      retried = true
+      retry
     end
   end
 
