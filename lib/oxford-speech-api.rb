@@ -25,8 +25,15 @@ class OxfordSpeechApi
         :content_length => data.size,
         :authorization => 'Bearer ' + get_access_token
     }
-    response = RestClient.post 'https://speech.platform.bing.com/recognize/query?' + URI.encode_www_form(params), data, headers
-    JSON.parse(response)
+    retried = false
+    begin
+        response = RestClient.post 'https://speech.platform.bing.com/recognize/query?' + URI.encode_www_form(params), data, headers
+        JSON.parse(response)
+    rescue Errno::ECONNRESET
+        return nil if retried
+        retried = true
+        retry
+    end
   end
 
   def text2speech(text)
@@ -41,7 +48,7 @@ class OxfordSpeechApi
     }
 
     data = "<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)'>" + text + "</voice></speak>"
-    response = RestClient.post 'https://speech.platform.bing.com/synthesize', data, headers
+    RestClient.post 'https://speech.platform.bing.com/synthesize', data, headers
   end
 
   private

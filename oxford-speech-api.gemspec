@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'oxford-speech-api'
   s.version     = '0.0.2'
-  s.date        = '2015-11-05'
+  s.date        = '2015-12-15'
   s.summary     = "Oxford Speech API"
   s.description = "Microsoft Oxford Speech API, Speech to Text, Text to Speech functionality"
   s.authors     = ["Farjad Adamjee"]
