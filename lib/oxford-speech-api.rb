@@ -8,7 +8,7 @@ class OxfordSpeechApi
     @secret = secret
   end
 
-  def speech2text(file, codec, rate)
+  def speech2text(file, codec, rate, override_params)
     params = {
         :scenarios => 'ulm',
         :appID => 'D4D52672-91D7-4C74-8AD8-42B1D98141A5',
@@ -18,7 +18,7 @@ class OxfordSpeechApi
         :format => 'json',
         :requestid => SecureRandom.uuid,
         :instanceid => SecureRandom.uuid
-    }
+    }.merge(override_params)
     data = File.read(file)
     headers = {
         :content_type => codec.to_s + '; samplerate=' + rate.to_s,
