@@ -11,5 +11,5 @@ Gem::Specification.new do |s|
     'https://github.com/Farjad/oxford-speech-api'
   s.license     = 'MIT'
 
-  s.add_dependency 'rest-client'
+  s.add_dependency 'rest-client', '~> 1.6'
 end
